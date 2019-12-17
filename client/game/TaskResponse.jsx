@@ -1,60 +1,75 @@
 import React from "react";
-import Slider from "meteor/empirica:slider";
 
 export default class TaskResponse extends React.Component {
-  handleChange = num => {
-    const { player } = this.props;
-    const value = Math.round(num * 100) / 100;
-    player.round.set("value", value);
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      answer: '',
+      message: ''
+    }
+  }
+
+  handleChange = el => {
+    this.setState({
+      answer: el.target.value
+    })
   };
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.player.stage.submit();
+    const { player, round } = this.props
+    const { answer } = this.state
+    const secretNumber = round.get('correctAnswer')
+    let numberOfGuess = player.get('numberOfGuess') + 1
+
+    player.set("numberOfGuess", numberOfGuess)
+        
+    if(secretNumber === parseInt(answer)) {
+      player.set("isCorrect", true)
+      this.setState({
+        message: 'Correct!'
+      })
+      setTimeout(() => {
+        player.stage.submit();
+      }, 1000)
+    } else if( secretNumber > parseInt(answer)) {
+      this.setState({
+        message: 'Below the number to guess'
+      })
+    } else {
+      this.setState({
+        message: 'Above the number to guess'
+      })
+    }
   };
 
-  renderSubmitted() {
-    return (
-      <div className="task-response">
-        <div className="response-submitted">
-          <h5>Waiting on other players...</h5>
-          Please wait until all players are ready
-        </div>
-      </div>
-    );
-  }
-
-  renderSlider() {
-    const { player } = this.props;
-    const value = player.round.get("value");
-    return (
-      <Slider
+  renderInput() {
+    const { answer } = this.state
+    
+    return ( 
+      <input
+        style={{ width: '100%', height: '30px'}}
+        type={"number"}
         min={0}
-        max={1}
-        stepSize={0.01}
-        labelStepSize={0.25}
         onChange={this.handleChange}
-        value={value}
-        hideHandleOnEmpty
+        value={answer}
+        required
       />
-    );
+    )
   }
 
   render() {
-    const { player } = this.props;
-
-    // If the player already submitted, don't show the slider or submit button
-    if (player.stage.submitted) {
-      return this.renderSubmitted();
-    }
-
+    const { message } = this.state
     return (
       <div className="task-response">
         <form onSubmit={this.handleSubmit}>
-          {this.renderSlider()}
-
-          <button type="submit">Submit</button>
+          {this.renderInput()}
+          <button style={{display: 'block', width: '100%' }} type="submit">Submit</button>
         </form>
+        <p style={{ marginTop: '20px', fontSize: '14px', fontWeight: 'bold', color: 'red'}}>
+          {message}
+        </p>
       </div>
     );
   }

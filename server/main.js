@@ -12,15 +12,24 @@ import "./callbacks.js";
 Empirica.gameInit(game => {
   game.players.forEach((player, i) => {
     player.set("avatar", `/avatars/jdenticon/${player._id}`);
-    player.set("score", 0);
+    player.set("numberOfGuess", 0);
+    player.set("isCorrect", false);
   });
 
+  let answer = Math.floor(Math.random() * 100)
+
   _.times(10, i => {
-    const round = game.addRound();
+    const round = game.addRound({
+      data: {
+        question: 'Can you guess the secret number(0-100)?',
+        correctAnswer: answer
+      }
+    });
+    
     round.addStage({
-      name: "response",
-      displayName: "Response",
-      durationInSeconds: 120
+      name: "Guess",
+      displayName: "Guess",
+      durationInSeconds: 30
     });
   });
 });

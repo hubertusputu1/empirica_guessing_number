@@ -13,12 +13,12 @@ export default class PlayerProfile extends React.Component {
     );
   }
 
-  renderScore() {
+  renderNumberOfGuess() {
     const { player } = this.props;
     return (
       <div className="profile-score">
-        <h4>Total score</h4>
-        <span>{(player.get("score") || 0).toFixed(2)}</span>
+        <h4>Total Of Guess</h4>
+        <span>{(player.get("numberOfGuess") || 0)}</span>
       </div>
     );
   }
@@ -29,7 +29,7 @@ export default class PlayerProfile extends React.Component {
     return (
       <aside className="player-profile">
         {this.renderProfile()}
-        {this.renderScore()}
+        {this.renderNumberOfGuess()}
         <Timer stage={stage} />
       </aside>
     );

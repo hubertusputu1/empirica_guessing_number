@@ -7,7 +7,14 @@ Empirica.onGameStart((game, players) => {});
 
 // onRoundStart is triggered before each round starts, and before onStageStart.
 // It receives the same options as onGameStart, and the round that is starting.
-Empirica.onRoundStart((game, round, players) => {});
+Empirica.onRoundStart((game, round, players) => {
+  players.forEach(player => {
+    const isCorrect = player.get('isCorrect')
+    if(isCorrect) {
+      player.stage.submit();
+    }
+  })
+});
 
 // onStageStart is triggered before each stage starts.
 // It receives the same options as onRoundStart, and the stage that is starting.
@@ -20,11 +27,6 @@ Empirica.onStageEnd((game, round, stage, players) => {});
 // onRoundEnd is triggered after each round.
 // It receives the same options as onGameEnd, and the round that just ended.
 Empirica.onRoundEnd((game, round, players) => {
-  players.forEach(player => {
-    const value = player.round.get("value") || 0;
-    const prevScore = player.get("score") || 0;
-    player.set("score", prevScore + value);
-  });
 });
 
 // onGameEnd is triggered when the game ends.
@@ -67,6 +69,7 @@ Empirica.onGameEnd((game, players) => {});
 //   // if (key !== "value") {
 //   //   return;
 //   // }
+
 // });
 
 // // onAppend is called when the experiment code call the `.append()` method
@@ -114,4 +117,5 @@ Empirica.onGameEnd((game, players) => {});
 //   stage,
 //   player // Player who submitted
 // ) => {
+//   console.log('masuk pak eko');
 // });

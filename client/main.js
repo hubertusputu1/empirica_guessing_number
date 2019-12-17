@@ -1,6 +1,5 @@
 import Empirica from "meteor/empirica:core";
 import { render } from "react-dom";
-import ExitSurvey from "./exit/ExitSurvey";
 import Thanks from "./exit/Thanks";
 import Round from "./game/Round";
 import InstructionStepOne from "./intro/InstructionStepOne";
@@ -17,10 +16,10 @@ import Quiz from "./intro/Quiz";
 // different instruction steps depending on the assigned treatment.
 Empirica.introSteps((game, treatment) => {
   const steps = [InstructionStepOne];
-  if (treatment.playerCount > 1) {
-    steps.push(InstructionStepTwo);
-  }
-  steps.push(Quiz);
+  // if (treatment.playerCount > 1) {
+  //   steps.push(InstructionStepTwo);
+  // }
+  // steps.push(Quiz);
   return steps;
 });
 
@@ -38,7 +37,7 @@ Empirica.round(Round);
 // If you don't return anything, or do not define this function, a default
 // exit screen will be shown.
 Empirica.exitSteps((game, player) => {
-  return [ExitSurvey, Thanks];
+  return [Thanks];
 });
 
 // Start the app render tree.
